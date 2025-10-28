@@ -35,17 +35,26 @@ steps:
     minorVersion: '0'
     patchVersion: '0'
 
-- task: DotNetCoreCLI@2
-  displayName: 'Push NuGet package to Azure Artifacts'
-  inputs:
-    command: custom
-    custom: nuget
-    arguments: |
-      push $(Build.ArtifactStagingDirectory)/*.nupkg \
+- script: |
+    echo "📦 Pushing NuGet package..."
+    dotnet nuget push $(Build.ArtifactStagingDirectory)/*.nupkg \
       --source "https://pkgs.dev.azure.com/kweason69/MSLearn-SpaceGame-Dependencies/_packaging/Tailspin.SpaceGame.Web.Models/nuget/v3/index.json" \
-      --api-key $(ADO_PAT_NUGET)
+      --api-key $ADO_PAT_NUGET
+  displayName: 'Push NuGet package to Azure Artifacts'
   env:
     ADO_PAT_NUGET: $(ADO_PAT_NUGET)    
+
+# - task: DotNetCoreCLI@2
+#   displayName: 'Push NuGet package to Azure Artifacts'
+#   inputs:
+#     command: custom
+#     custom: nuget
+#     arguments: |
+#       push $(Build.ArtifactStagingDirectory)/*.nupkg \
+#       --source "https://pkgs.dev.azure.com/kweason69/MSLearn-SpaceGame-Dependencies/_packaging/Tailspin.SpaceGame.Web.Models/nuget/v3/index.json" \
+#       --api-key $(ADO_PAT_NUGET)
+#   env:
+#     ADO_PAT_NUGET: $(ADO_PAT_NUGET)    
  
 # - task: NuGetCommand@2
 #   displayName: 'Publish NuGet package'
